@@ -60,17 +60,18 @@ def convert_to_binary_black_and_white(image_path, threshold=128):
     plt.title('Pixel Locations of Less Common Color')
     plt.xlabel('X-coordinate')
     plt.ylabel('Y-coordinate')
+    plt.show()
 
     # Save the plot as an image file
     plot_output_path = "/images/binary_test01_plot.jpg"
     plt.savefig(plot_output_path)
-
+    
     print(f"Plot saved as {plot_output_path}")
 
-# Specify the path to your JPEG image
+# Specify the path to the JPEG image
 image_path = "/images/test01.jpg"
 
-# Set the threshold for binary conversion (adjust as needed)
+# Set the threshold for binary conversion 
 threshold_value = 128
 
 # Call the function to convert, save the image, calculate percentages, get coordinates, save coordinates to a text file, and save the plot
