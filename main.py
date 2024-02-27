@@ -8,7 +8,7 @@ def convert_to_binary_black_and_white(image_path, threshold=128):
     # Convert the image to grayscale
     img = img.convert('L')
 
-    # Apply binary threshold without using lambda
+    # Apply binary threshold 
     binary_data = []
     for pixel_value in img.getdata():
         if pixel_value > threshold:
