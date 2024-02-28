@@ -34,9 +34,9 @@ def get_plotpoints(coordinates):
 			low_min = y
 			min_index = index
 
+
 	print(f"\nHigh Max is {high_max} at index {max_index} ({coordinates[max_index]})")
 	print(f"Low Min is {low_min} at index {min_index} ({coordinates[min_index]})")
-
 	# Gets first minimum at the left of high_max (high_min)
 	# Initialize high_min point with negative infinity
 	high_min = float('inf')
@@ -69,4 +69,4 @@ def get_plotpoints(coordinates):
 
 	print(f"Low Max is {low_max}")
 
-	return high_max, low_max, high_min, low_min
+	return high_max, low_max, high_min, low_min, coordinates[max_index], coordinates[min_index]
