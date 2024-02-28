@@ -1,78 +1,31 @@
-from PIL import Image
-import matplotlib.pyplot as plt
+import helper_functions
+from process_image import convert_to_binary_black_and_white, extract_wave_colour
+from get_wave_coordinates import plot_coordinates, get_plotpoints
+from calculate_pulse_pressure import calc_pulsepressure_var
 
-def convert_to_binary_black_and_white(image_path, threshold=128):
-    # Open the image
-    img = Image.open(image_path)
+def main():
+	# Gets image path
+	image_path = helper_functions.get_image()
 
-    # Convert the image to grayscale
-    img = img.convert('L')
+	# Gets threshold value to use
+	threshold_value = helper_functions.get_threshold()
 
-    # Apply binary threshold 
-    binary_data = []
-    for pixel_value in img.getdata():
-        if pixel_value > threshold:
-            binary_data.append(255)
-        else:
-            binary_data.append(0)
+	# Converts image to black and white, extracts binary data
+	binary_image, binary_data = convert_to_binary_black_and_white(image_path, threshold_value)
 
-    # Create a new image with binary data
-    binary_img = Image.new('L', img.size)
-    binary_img.putdata(binary_data)
+	# Extracts wave colour
+	wave_colour = extract_wave_colour(binary_image, binary_data)
 
-    # Save the result
-    output_path = "/images/binary_test01.jpg"
-    binary_img.save(output_path)
+	# Plots coordinates as a list
+	coordinates = plot_coordinates(wave_colour, binary_image)
 
-    print(f"Image converted and saved as {output_path}")
+	# Get relevant plot points from list
+	high_max, low_max, high_min, low_min = get_plotpoints(coordinates)
 
-    # Calculate percentage of black and white pixels
-    total_pixels = binary_img.size[0] * binary_img.size[1]
-    black_pixels = binary_data.count(0)
-    white_pixels = binary_data.count(255)
+	# Calculate pulse_pressure
+	ppv = calc_pulsepressure_var(high_max, low_max, high_min, low_min)
 
-    percentage_black = (black_pixels / total_pixels) * 100
-    percentage_white = (white_pixels / total_pixels) * 100
+	return ppv
 
-    print(f"Percentage of black pixels: {percentage_black:.2f}%")
-    print(f"Percentage of white pixels: {percentage_white:.2f}%")
-
-    # Determine the less common color
-    less_common_color = 0 if black_pixels < white_pixels else 255
-
-    # Create a list of coordinates for the less common color
-    coordinates = [(x, y) for x in range(binary_img.size[0]) for y in range(binary_img.size[1]) if binary_img.getpixel((x, y)) == less_common_color]
-
-    # Print the coordinates
-    print(f"Coordinates of the less common color ({less_common_color}): {coordinates}")
-
-    # Save the coordinates to a text file
-    txt_output_path = "coordinates.txt"
-    with open(txt_output_path, 'w') as file:
-        for x, y in coordinates:
-            file.write(f"{x},{y}\n")
-
-    print(f"Coordinates saved to {txt_output_path}")
-
-    # Plot the graph
-    x_values, y_values = zip(*coordinates)
-    plt.scatter(x_values, y_values, color='red', marker='.')
-    plt.title('Pixel Locations of Less Common Color')
-    plt.xlabel('X-coordinate')
-    plt.ylabel('Y-coordinate')
-    plt.show()
-
-    # Save the plot as an image file
-    plot_output_path = "/images/binary_test01_plot.jpg"
-    plt.savefig(plot_output_path)
-    
-    print(f"Plot saved as {plot_output_path}")
-
-# Specify the path to the JPEG image
-image_path = "/images/test01.jpg"
-
-# Set the threshold for binary conversion 
-threshold_value = 128
-
-# Call the function to convert, save the image, calculate percentages, get coordinates, save coordinates to a text file, and save the plot
-convert_to_binary_black_and_white(image_path, threshold_value)
+if __name__ == "__main__":
+	main()
