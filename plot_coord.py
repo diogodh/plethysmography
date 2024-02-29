@@ -10,6 +10,9 @@ def plot_graph(coordinates, coord_max_index, coord_min_index):
     plt.scatter(coord_max_index[0], coord_max_index[1], color='red', marker='^', label='Max Index')
     plt.scatter(coord_min_index[0], coord_min_index[1], color='red', marker='v', label='Min Index')
 
+    # Invert the y-axis
+    plt.gca().invert_yaxis()
+
     # Adding labels and legend
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
