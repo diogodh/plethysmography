@@ -4,7 +4,7 @@ import sys
 def get_image():
 	# If given at CLI, use that one
 	if len(sys.argv) > 1:
-		image_path = ("images/" + sys.argv[1] + ".jpg")
+		image_path = ("images/" + sys.argv[1])
 	# If non-existant, get standard test image
 	else:
 		image_path = "images/test01.jpg"
